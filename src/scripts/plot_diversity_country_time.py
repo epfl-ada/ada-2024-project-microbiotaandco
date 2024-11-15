@@ -1,5 +1,22 @@
 import matplotlib.pyplot as plt
 
+
+df_merged = df_result_age \
+    .merge(df_result_height, on='Freebase Movie ID') \
+    .merge(df_result_ethnicity, on='Freebase Movie ID') \
+    .merge(df_result_gender, on='Freebase Movie ID')\
+    .merge(df_result_foreigners, on='Freebase Movie ID')
+
+df_merged['diversity_score'] = df_merged[['age_score', 'height_score', 'ethnicity_score', 'gender_score','Foreign Actor Proportion']].mean(axis=1)
+df_merged.head(10)
+
+#adding IDs associated with the movie metadata
+Diversity_movie_metadata=df_merged.merge(
+    df_merged_unique[['Freebase Movie ID', 'Movie Release Date', 'Movie Box Office Revenue', 'Movie Language', 'Movie Country']],
+    on='Freebase Movie ID',
+    how='inner') 
+Diversity_movie_metadata.sample(10)
+
 df_yearly = Diversity_movie_metadata.groupby('Movie Release Date')['gender_score'].mean().reset_index()
 
 plt.figure(figsize=(12, 6))
