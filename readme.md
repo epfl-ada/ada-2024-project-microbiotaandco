@@ -76,6 +76,9 @@ The directory structure of new project looks like this:
 ### How to use the results
 Open the notebook results.ipynb and run the cells, the results will be displayed.
 
+## Additional Dataset:
+
+For the second question we wanted to obtain a new column that would contain stereotipycal roles. For example Batman should have at least superhero as a stereotipycal. To obtain this we queried Wikidata to obtain the occupations of a character. The query was made possible by using the Freebase Character ID. This new dataset contains 5,831 rows, and can be considered a subset of the old one. Our visualization do not suggest any biases introduced by the subselection induced by the response of Wikidata. Nevertheless Additional tests may be valuable to strengthen our confidence in this new data.
 
 ## :computer: Methods 
 
