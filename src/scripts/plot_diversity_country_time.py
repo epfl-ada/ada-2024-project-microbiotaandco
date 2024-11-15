@@ -12,6 +12,32 @@ import os
 df_metadata_OI_exploded=pd.read_csv('data/metadata_OI_exploded.csv')
 
 
+movie_info = df_metadata_OI_exploded.groupby('Freebase Movie ID').agg({
+    'Movie Country': lambda x: list(x.unique()),  
+    'Movie Language': lambda x: list(x.unique()), 
+    'Movie Release Date': 'first',                
+    'Movie Box Office Revenue': 'first'           
+}).reset_index()
+
+
+df_merged_1 = df_metadata_OI_exploded.drop(columns=['Movie Country', 'Movie Language', 'Movie Release Date', 'Movie Box Office Revenue']) \
+                          .merge(movie_info, on='Freebase Movie ID', how='left')
+
+
+df_merged_1 = df_merged_1[[
+    'Freebase Movie ID', 'Movie Country', 'Movie Language', 'Movie Release Date', 'Movie Box Office Revenue',
+    'Actor Age', 'Actor Gender', 'Actor Ethnicity', 'Actor Height', 'Actor Country of Origin'
+]]
+
+
+df_merged_unique = df_merged_1.drop_duplicates(subset=[
+    'Freebase Movie ID', 'Actor Height', 'Actor Ethnicity', 'Actor Age', 'Actor Gender', 'Actor Country of Origin'
+], keep='first')
+
+count = df_merged_unique['Freebase Movie ID'].value_counts().get('/m/011yfd', 0)
+
+df_metadata_OI = df_merged_unique[df_merged_unique['Freebase Movie ID'].map(df_merged_unique['Freebase Movie ID'].value_counts()) > 1]
+df_metadata_OI.head(100)
 
 
 def calculate_gender_diversity(df):
@@ -102,32 +128,6 @@ def calculate_foreign_actor_proportion(df):
     return result_df
 
 
-movie_info = df_metadata_OI_exploded.groupby('Freebase Movie ID').agg({
-    'Movie Country': lambda x: list(x.unique()),  
-    'Movie Language': lambda x: list(x.unique()), 
-    'Movie Release Date': 'first',                
-    'Movie Box Office Revenue': 'first'           
-}).reset_index()
-
-
-df_merged_1 = df_metadata_OI_exploded.drop(columns=['Movie Country', 'Movie Language', 'Movie Release Date', 'Movie Box Office Revenue']) \
-                          .merge(movie_info, on='Freebase Movie ID', how='left')
-
-
-df_merged_1 = df_merged_1[[
-    'Freebase Movie ID', 'Movie Country', 'Movie Language', 'Movie Release Date', 'Movie Box Office Revenue',
-    'Actor Age', 'Actor Gender', 'Actor Ethnicity', 'Actor Height', 'Actor Country of Origin'
-]]
-
-
-df_merged_unique = df_merged_1.drop_duplicates(subset=[
-    'Freebase Movie ID', 'Actor Height', 'Actor Ethnicity', 'Actor Age', 'Actor Gender', 'Actor Country of Origin'
-], keep='first')
-
-count = df_merged_unique['Freebase Movie ID'].value_counts().get('/m/011yfd', 0)
-
-df_metadata_OI = df_merged_unique[df_merged_unique['Freebase Movie ID'].map(df_merged_unique['Freebase Movie ID'].value_counts()) > 1]
-df_metadata_OI.head(100)
 
 
 
