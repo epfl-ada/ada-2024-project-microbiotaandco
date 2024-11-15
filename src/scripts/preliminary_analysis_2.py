@@ -233,5 +233,80 @@ plt.xlabel('Count')
 plt.ylabel('Country of Origin')
 plt.show()
 
+def cramers_v(x, y):
+    # Create a contingency table from the two categorical variables x and y
+    contingency_table = pd.crosstab(x, y)
 
+    # Calculate the Chi-squared statistic from the contingency table
+    chi2 = chi2_contingency(contingency_table)[0]
 
+    # Get the total number of observations (the sum of all entries in the contingency table)
+    n = contingency_table.sum().sum()
+
+    # Calculate phi-squared statistic
+    phi2 = chi2 / n
+
+    # Get the number of rows (r) and columns (k) in the contingency table
+    r, k = contingency_table.shape
+
+    # Correct the phi-squared statistic for cases where n is small
+    phi2corr = max(0, phi2 - (k - 1) * (r - 1) / (n - 1))
+
+    # Correct the number of rows (r) for the calculation of Cramér's V
+    rcorr = r - (r - 1) ** 2 / (n - 1)
+
+    # Correct the number of columns (k) for the calculation of Cramér's V
+    kcorr = k - (k - 1) ** 2 / (n - 1)
+
+    # Return the square root of the corrected phi-squared statistic divided by the smaller of the two corrections
+    return np.sqrt(phi2corr / min((kcorr - 1), (rcorr - 1)))
+
+df_attributes = pd.concat([df_metadata_OI_exploded['Actor Gender'], df_metadata_OI_exploded['Actor Height'], df_metadata_OI_exploded['Actor Age'], df_metadata_OI_exploded['Actor Ethnicity'], df_metadata_OI_exploded['Actor Country of Origin']], axis = 1)
+df_attributes.head()
+
+# Calculate Cramér's V for all pairs of categorical variables
+categories = df_attributes.columns
+cramers_v_matrix = pd.DataFrame(index=categories, columns=categories)
+
+for cat1 in categories:
+    for cat2 in categories:
+        if cat1 == cat2:
+            cramers_v_matrix.loc[cat1, cat2] = 1.0  # Perfect correlation with itself
+        else:
+            cramers_v_matrix.loc[cat1, cat2] = cramers_v(df_attributes[cat1], df_attributes[cat2])
+
+# Convert to float
+cramers_v_matrix = cramers_v_matrix.astype(float)
+
+# Priting the cramers_v_matrix
+plt.figure(figsize=(8, 6))  # Adjust the figure size as necessary
+sns.heatmap(cramers_v_matrix, annot=True, cmap='coolwarm', linewidths=0.5)
+
+# Show the plot
+plt.title("Correlation Matrix Heatmap")
+plt.show()
+
+df_attributes = pd.concat([df_metadata_OI_exploded['Movie Release Date'], df_metadata_OI_exploded['Movie Box Office Revenue'], df_metadata_OI_exploded['Movie Language'], df_metadata_OI_exploded['Movie Country'] ,df_metadata_OI_exploded['Actor Gender'], df_metadata_OI_exploded['Actor Height'], df_metadata_OI_exploded['Actor Age'], df_metadata_OI_exploded['Actor Ethnicity'], df_metadata_OI_exploded['Actor Country of Origin']], axis = 1)
+df_attributes.head()
+
+# Calculate Cramér's V for all pairs of categorical variables
+categories = df_attributes.columns
+cramers_v_matrix = pd.DataFrame(index=categories, columns=categories)
+
+for cat1 in categories:
+    for cat2 in categories:
+        if cat1 == cat2:
+            cramers_v_matrix.loc[cat1, cat2] = 1.0  # Perfect correlation with itself
+        else:
+            cramers_v_matrix.loc[cat1, cat2] = cramers_v(df_attributes[cat1], df_attributes[cat2])
+
+# Convert to float
+cramers_v_matrix = cramers_v_matrix.astype(float)
+
+# Priting the cramers_v_matrix
+plt.figure(figsize=(8, 6))  # Adjust the figure size as necessary
+sns.heatmap(cramers_v_matrix, annot=True, cmap='coolwarm', linewidths=0.5)
+
+# Show the plot
+plt.title("Correlation Matrix Heatmap")
+plt.show()
