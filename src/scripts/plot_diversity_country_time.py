@@ -367,3 +367,299 @@ plt.xticks(rotation=45, ha='right')
 plt.tight_layout()
 
 plt.show()
+
+
+
+#select the relevant columns , here excluded 'diversity_score' since it is an average
+df_corr = df_merged[['age_score', 'height_score', 'ethnicity_score', 'gender_score', 'Foreign Actor Proportion']]
+
+# correlation matrix
+corr_matrix = df_corr.corr()
+
+# heatmap
+plt.figure(figsize=(10, 6))
+sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', linewidths=0.5, fmt='.2f', cbar=True)
+
+plt.title('Correlation Heatmap of diversity scores', fontsize=16)
+plt.tight_layout()
+plt.show()
+
+
+
+from sklearn.linear_model import LinearRegression
+
+
+#mean gender score
+df_yearly = Diversity_movie_metadata.groupby('Movie Release Date')['gender_score'].mean().reset_index()
+
+#define variables
+X = df_yearly['Movie Release Date'].values.reshape(-1, 1)  
+y = df_yearly['gender_score'].values  
+
+#linear regression model and fit 
+model = LinearRegression()
+model.fit(X, y)
+
+#predict the gender score values using the model
+y_pred = model.predict(X)
+
+# Plot the original data
+plt.figure(figsize=(12, 6))
+plt.plot(df_yearly['Movie Release Date'], df_yearly['gender_score'], marker='o', color='b', linestyle='-', linewidth=2, markersize=5, label='Mean gender score')
+
+#plot reg line
+plt.plot(df_yearly['Movie Release Date'], y_pred, color='r', linestyle='--', linewidth=2, label='Linear Regression line')
+
+#add regression equation 
+equation_text = f'Gender Score = {model.coef_[0]:.4f} * Year + {model.intercept_:.2f}'
+plt.text( df_yearly['Movie Release Date'].min(), max(y) * 0.95, equation_text, fontsize=8, color='darkred')
+
+# Add labels and title
+plt.xlabel('Movie release year', fontsize=14)
+plt.ylabel('Mean gender score', fontsize=14)
+plt.title('Mean gender score by year with LR fit', fontsize=16)
+
+plt.grid(True)
+plt.legend()
+plt.tight_layout()
+plt.show()
+
+#show explicitly the regression model's coefficients and intercept
+print(f'Linear regression coefficient: {model.coef_[0]}')
+print(f'Linear regression intercept: {model.intercept_}')
+
+
+#mean gender score
+df_yearly = Diversity_movie_metadata.groupby('Movie Release Date')['ethnicity_score'].mean().reset_index()
+
+#define variables
+X = df_yearly['Movie Release Date'].values.reshape(-1, 1)  
+y = df_yearly['ethnicity_score'].values  
+
+#linear regression model and fit 
+model = LinearRegression()
+model.fit(X, y)
+
+#predict the gender score values using the model
+y_pred = model.predict(X)
+
+# Plot the original data
+plt.figure(figsize=(12, 6))
+plt.plot(df_yearly['Movie Release Date'], df_yearly['ethnicity_score'], marker='o', color='b', linestyle='-', linewidth=2, markersize=5, label='Mean ethnicity score')
+
+#plot reg line
+plt.plot(df_yearly['Movie Release Date'], y_pred, color='r', linestyle='--', linewidth=2, label='Linear Regression line')
+
+#add regression equation 
+equation_text = f'Ethnicity Score = {model.coef_[0]:.4f} * Year + {model.intercept_:.2f}'
+plt.text( df_yearly['Movie Release Date'].min(), max(y) * 0.85, equation_text, fontsize=8, color='darkred')
+
+# Add labels and title
+plt.xlabel('Movie release year', fontsize=14)
+plt.ylabel('Mean ethnicity score', fontsize=14)
+plt.title('Mean ethnicity score by year with LR fit', fontsize=16)
+
+plt.grid(True)
+plt.legend()
+plt.tight_layout()
+plt.show()
+
+#show explicitly the regression model's coefficients and intercept
+print(f'Linear regression coefficient: {model.coef_[0]}')
+print(f'Linear regression intercept: {model.intercept_}')
+
+
+
+df_yearly_gender = Diversity_movie_metadata.groupby('Movie Release Date')['gender_score'].mean().reset_index()
+df_yearly_ethnicity = Diversity_movie_metadata.groupby('Movie Release Date')['ethnicity_score'].mean().reset_index()
+df_yearly_age = Diversity_movie_metadata.groupby('Movie Release Date')['age_score'].mean().reset_index()
+df_yearly_foreign_actor = Diversity_movie_metadata.groupby('Movie Release Date')['Foreign Actor Proportion'].mean().reset_index()
+df_yearly_diversitymean = Diversity_movie_metadata.groupby('Movie Release Date')['diversity_score'].mean().reset_index()
+df_yearly_height = Diversity_movie_metadata.groupby('Movie Release Date')['height_score'].median().reset_index()
+#make a list of dfs
+dfs = [
+    ('Gender Score', df_yearly_gender), 
+    ('Ethnicity Score', df_yearly_ethnicity), 
+    ('Age Score', df_yearly_age), 
+    ('Foreign Actor Proportion', df_yearly_foreign_actor), 
+    ('Diversity Score', df_yearly_diversitymean), 
+    ('Height Score', df_yearly_height)
+]
+
+#perform linear regression over every df in the list and store the results in a list
+results = []
+for label, df in dfs:
+    X = df['Movie Release Date'].values.reshape(-1, 1)
+    y = df.iloc[:, 1].values
+    model = LinearRegression()
+    model.fit(X, y)
+    y_pred = model.predict(X)
+    results.append((label, model.coef_[0], model.intercept_))
+
+#make a barplot of the coefficients with on the x axis the dfs and on the y the coefficients
+labels = [result[0] for result in results]
+coefficients = [result[1] for result in results]
+
+plt.figure(figsize=(12, 6))
+plt.bar(labels, coefficients, color='skyblue', alpha=0.7)
+plt.xlabel('Diversity type', fontsize=14)
+plt.ylabel('Regression coefficient (slope)', fontsize=14)
+plt.title('Linear regression coefficients for different diversity metrics over time', fontsize=16)
+plt.xticks(rotation=45, ha='right')
+plt.grid(axis='y', linestyle='--', alpha=0.7)
+plt.tight_layout()
+plt.show()
+
+
+#importation
+from sklearn.preprocessing import PolynomialFeatures
+
+X = df_yearly_ethnicity['Movie Release Date'].values.reshape(-1, 1)  
+y = df_yearly_ethnicity['ethnicity_score'].values  
+
+
+degree = 3
+# polynomial feature creation with defined degree
+poly = PolynomialFeatures(degree)
+X_poly = poly.fit_transform(X)
+
+
+#create linear regression model and fit it into the poly features
+model = LinearRegression()
+model.fit(X_poly, y)
+
+
+#prediction
+y_pred_poly = model.predict(X_poly)
+
+
+#plot original data
+plt.figure(figsize=(12, 6))
+plt.plot(df_yearly_ethnicity['Movie Release Date'], df_yearly_ethnicity['ethnicity_score'], marker='o', color='b', linestyle='-', linewidth=2, markersize=5, label='Mean ethnicity score')
+
+
+#plot polynomial reg curve
+plt.plot(df_yearly_ethnicity['Movie Release Date'], y_pred_poly, color='r', linestyle='--', linewidth=2, label= f"Polynomial regression curve degree, {degree}")
+
+
+#add regression equation
+coeffs = model.coef_
+intercept = model.intercept_
+equation_text = f"y = {intercept:.3f} + " + " + ".join([f"{coeffs[i]:.3f}x^{i}" for i in range(1, len(coeffs))])
+plt.text(0.05, 0.85, equation_text, transform=plt.gca().transAxes, fontsize=10, verticalalignment='top')
+
+
+plt.xlabel('Movie release year', fontsize=14)
+plt.ylabel('Mean ethnicity score', fontsize=14)
+plt.title('Mean ethnicity score by year with polynomial regression', fontsize=16)
+plt.grid(True)
+plt.legend()
+plt.tight_layout()
+plt.show()
+
+
+#show explicitly the model's coefficients and intercept
+print(f'Polynomial regression coefficients: {coeffs}')
+print(f'Polynomial regression intercept: {intercept}')
+
+
+
+#analysis of critical and inflection points
+degree = 3  
+X = df_yearly_ethnicity['Movie Release Date'].values
+y = df_yearly_ethnicity['ethnicity_score'].values
+poly = PolynomialFeatures(degree)
+X_poly = poly.fit_transform(X.reshape(-1, 1))
+
+#fit
+model = LinearRegression()
+model.fit(X_poly, y)
+
+#get coeffs
+coefficients = model.coef_
+intercept = model.intercept_
+poly_coeff = np.append(intercept, coefficients[1:]) 
+p = np.poly1d(poly_coeff[::-1]) 
+
+#derivatives for critical and inflection points
+p_prime = p.deriv()  #first derivative
+p_double_prime = p_prime.deriv()  #second derivative
+
+# Find critical and inflection points
+critical_points = p_prime.r
+inflection_points = p_double_prime.r
+
+#plot the polynomial curve and highlight critical and inflection points
+x_vals = np.linspace(X.min(), X.max(), 500)
+y_vals = p(x_vals)
+
+plt.figure(figsize=(12, 6))
+plt.plot(X, y, 'bo', label='Data')
+plt.plot(x_vals, y_vals, 'r-', label=f'Polynomial regression (degree {degree})')
+plt.scatter(critical_points, p(critical_points), color='g', s=100, zorder=5, label='Critical points')
+plt.scatter(inflection_points, p(inflection_points), color='purple', s=100, zorder=5, label='Inflection points')
+plt.xlabel('Movie release year')
+plt.ylabel('Mean ethnicity score')
+plt.title('Critical and Inflection Points of Polynomial Regression')
+plt.legend()
+plt.grid(True)
+plt.show()
+
+# Optional: Print critical and inflection points
+print("Critical Points (x values):", critical_points)
+print("Inflection Points (x values):", inflection_points)
+
+
+X = df_yearly_diversitymean['Movie Release Date'].values.reshape(-1, 1)  
+y = df_yearly_diversitymean['diversity_score'].values  
+
+
+degree = 6
+# polynomial feature creation with defined degree
+poly = PolynomialFeatures(degree)
+X_poly = poly.fit_transform(X)
+
+
+#create linear regression model and fit it into the poly features
+model = LinearRegression()
+model.fit(X_poly, y)
+#prediction
+y_pred_poly = model.predict(X_poly)
+
+
+#plot original data
+plt.figure(figsize=(12, 6))
+plt.plot(df_yearly_diversitymean['Movie Release Date'], df_yearly_diversitymean['diversity_score'], marker='o', color='b', linestyle='-', linewidth=2, markersize=5, label='Mean diversity score')
+
+
+#plot polynomial reg curve
+plt.plot(df_yearly_diversitymean['Movie Release Date'], y_pred_poly, color='r', linestyle='--', linewidth=2, label= f"Polynomial regression curve degree, {degree}")
+
+
+#add regression equation
+coeffs = model.coef_
+intercept = model.intercept_
+equation_text = f"y = {intercept:.3f} + " + " + ".join([f"{coeffs[i]:.3f}x^{i}" for i in range(1, len(coeffs))])
+plt.text(0.05, 0.85, equation_text, transform=plt.gca().transAxes, fontsize=10, verticalalignment='top')
+
+
+plt.xlabel('Movie release year', fontsize=14)
+plt.ylabel('Mean diversity score', fontsize=14)
+plt.title('Mean diversity score by year with polynomial regression', fontsize=16)
+plt.grid(True)
+plt.legend()
+plt.tight_layout()
+plt.show()
+
+
+#show explicitly the model's coefficients and intercept
+print(f'Polynomial regression coefficients: {coeffs}')
+print(f'Polynomial regression intercept: {intercept}')
+
+
+
+#pairwise relationships between diversity scores
+sns.pairplot(df_merged[['age_score', 'height_score', 'ethnicity_score', 'gender_score', 'Foreign Actor Proportion', 'diversity_score']])
+plt.suptitle('Pairwise relationship between diversity scores', y=1.02)
+plt.tight_layout()
+plt.show()
