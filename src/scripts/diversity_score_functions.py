@@ -1,3 +1,6 @@
+import numpy as np
+import pandas as pd
+
 def calculate_gender_diversity(df):
     #This function computes gender diversity in a list of aactors
     #inputs: df with column actor genders as 'M' or 'F'
