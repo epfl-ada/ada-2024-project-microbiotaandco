@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-df_metadata_OI_exploded = pd.read_csv("../../data/metadata_OI_exploded")
+df_metadata_OI_exploded = pd.read_csv("/../../data/metadata_OI_exploded")
 
 def calculate_gender_diversity(df):
     #This function computes gender diversity in a list of aactors

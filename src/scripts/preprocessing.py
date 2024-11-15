@@ -200,64 +200,140 @@ def remove_surrogates(text):
     return text
 
 
-def process_movie_dictionaries(df_column, output_csv_path, translation_dict=None):
-    """
-    Process a column of movie languages, handles surrogate characters, and applies translations.
+import ast
+import pandas as pd
+import numpy as np
 
-    This function processes a column of movie languages represented as dictionaries or strings, 
-    removes any surrogate characters, replaces language IDs with their translations, and saves 
-    the translated dictionary as a CSV file. If no translation dictionary is provided, one is 
-    created from the provided column data. The function also ensures that empty lists are replaced 
-    with NaN values.
+def process_movie_dictionaries(
+    df_column, 
+    language_dict_path, 
+    translation_csv_path, 
+    translated_csv_path, 
+    sep=';'
+):
+    """
+    Process a column of movie languages by creating dictionaries, handling surrogate characters, 
+    applying translations, and cleaning the data.
 
     Parameters:
-        df_column (pd.Series): A pandas Series containing movie languages as dictionaries or strings.
-                               Each dictionary maps language IDs to their corresponding translations.
-        output_csv_path (str): The file path where the cleaned and translated dictionary will be saved as a CSV.
-        translation_dict (dict, optional): A dictionary of language translations. If None, one will be created 
-                                           using the provided column data.
+        df_column (pd.Series): A pandas Series containing movie languages represented as dictionaries or strings.
+        language_dict_path (str): Path to save the initial language dictionary CSV file.
+        translation_csv_path (str): Path to save the translated language dictionary CSV file.
+        translated_csv_path (str): Path to the manually translated language dictionary file.
+        sep (str): Separator used in the translated CSV file (default is ';').
 
     Returns:
-        pd.Series: A cleaned and processed pandas Series where language IDs are replaced by their translations, 
-                   surrogate characters are removed, and empty lists are replaced with NaN.
+        pd.Series: Processed pandas Series with movie languages translated and cleaned.
     """
-    # Convert strings to dictionaries if the element is a string
+    # Step 1: Convert strings to dictionaries
     df_column = df_column.apply(lambda x: ast.literal_eval(x) if isinstance(x, str) else x)
-    
-    # Create the translation dictionary if one is not provided
-    if translation_dict is None:
-        translation_dict = create_dictionary(df_column)
 
-    # Convert the translation dictionary to a DataFrame and save to a CSV file
-    df_translation_dict = pd.DataFrame(list(translation_dict.items()), columns=['Language', 'Translation'])
-    df_translation_dict.to_csv(output_csv_path, index=False, encoding='utf-8', errors='replace')
+    # Step 2: Create the initial language dictionary
+    language_dict = create_dictionary(df_column)
 
-    # Check for problematic entries (e.g., surrogate characters)
-    for key, value in translation_dict.items():
+    # Step 3: Check for problematic entries
+    for key, value in language_dict.items():
         if has_surrogates(key) or has_surrogates(value):
             print(f"Problematic entry: {key} -> {value}")
 
-    # Clean the translation dictionary by removing surrogate characters
-    cleaned_translation_dict = {
+    # Step 4: Clean the language dictionary
+    cleaned_language_dict = {
         remove_surrogates(key): remove_surrogates(value)
-        for key, value in translation_dict.items()
+        for key, value in language_dict.items()
     }
 
-    # Convert dictionary entries into lists of language keys
-    df_column = df_column.apply(lambda x: list(x.keys()) if isinstance(x, dict) else x)
-    
-    # Replace movie language IDs in the list with their corresponding translations
-    df_column = df_column.apply(
-        lambda x: [cleaned_translation_dict.get(language, language) for language in x] if isinstance(x, list) else x
+    # Step 5: Save the cleaned dictionary to a CSV file
+    df_language_dict = pd.DataFrame(
+        list(cleaned_language_dict.items()), columns=['Language', 'Translation']
     )
-    
-    # Ensure that all language entries are split and expanded
+    df_language_dict.to_csv(language_dict_path, index=False, encoding='utf-8', errors='replace')
+
+    # Step 6: Load manually translated dictionary
+    df_language_translated = pd.read_csv(translated_csv_path, sep=sep)
+    translated_language_dict = df_language_translated.set_index('Language')['Group'].to_dict()
+
+    # Step 7: Convert dictionaries in the Series to lists of keys
+    df_column = df_column.apply(lambda x: list(x.keys()) if isinstance(x, dict) else x)
+
+    # Step 8: Replace language IDs with their corresponding translations
+    df_column = df_column.apply(
+        lambda x: [translated_language_dict.get(language, language) for language in x] 
+        if isinstance(x, list) else x
+    )
+
+    # Step 9: Ensure all languages are split properly
     df_column = df_column.apply(split)
-    
-    # Replace empty lists with NaN values
+
+    # Step 10: Replace empty lists with NaN
     df_column = df_column.apply(replace_empty_list)
 
     return df_column
+
+def process_movie_countries(
+    df_column, 
+    country_dict_path, 
+    translation_csv_path, 
+    translated_csv_path, 
+    sep=';'
+):
+    """
+    Process a column of movie countries by creating dictionaries, handling surrogate characters, 
+    applying translations, and cleaning the data.
+
+    Parameters:
+        df_column (pd.Series): A pandas Series containing movie countries represented as dictionaries or strings.
+        country_dict_path (str): Path to save the initial country dictionary CSV file.
+        translation_csv_path (str): Path to save the translated country dictionary CSV file.
+        translated_csv_path (str): Path to the manually translated country dictionary file.
+        sep (str): Separator used in the translated CSV file (default is ';').
+
+    Returns:
+        pd.Series: Processed pandas Series with movie countries translated and cleaned.
+    """
+    # Step 1: Convert strings to dictionaries
+    df_column = df_column.apply(lambda x: ast.literal_eval(x) if isinstance(x, str) else x)
+
+    # Step 2: Create the initial country dictionary
+    country_dict = create_dictionary(df_column)
+
+    # Step 3: Check for problematic entries
+    for key, value in country_dict.items():
+        if has_surrogates(key) or has_surrogates(value):
+            print(f"Problematic entry: {key} -> {value}")
+
+    # Step 4: Clean the country dictionary
+    cleaned_country_dict = {
+        remove_surrogates(key): remove_surrogates(value)
+        for key, value in country_dict.items()
+    }
+
+    # Step 5: Save the cleaned dictionary to a CSV file
+    df_country_dict = pd.DataFrame(
+        list(cleaned_country_dict.items()), columns=['Country', 'Translation']
+    )
+    df_country_dict.to_csv(country_dict_path, index=False, encoding='utf-8', errors='replace')
+
+    # Step 6: Load manually translated dictionary
+    df_country_translated = pd.read_csv(translated_csv_path, sep=sep)
+    translated_country_dict = df_country_translated.set_index('Country')['Group'].to_dict()
+
+    # Step 7: Convert dictionaries in the Series to lists of keys
+    df_column = df_column.apply(lambda x: list(x.keys()) if isinstance(x, dict) else x)
+
+    # Step 8: Replace country IDs with their corresponding translations
+    df_column = df_column.apply(
+        lambda x: [translated_country_dict.get(country, country) for country in x] 
+        if isinstance(x, list) else x
+    )
+
+    # Step 9: Ensure all countries are split properly
+    df_column = df_column.apply(split)
+
+    # Step 10: Replace empty lists with NaN
+    df_column = df_column.apply(replace_empty_list)
+
+    return df_column
+
 
 def preprocessing_datasets():
     """
@@ -353,8 +429,8 @@ def preprocessing_datasets():
     df_movie_release_date = pd.to_numeric(df_movie_release_date, errors='coerce')
 
     # Process Movie Language
-    df_movie_language_processed = process_movie_dictionaries(df_movie_metadata_A['Movie Language'], output_csv_path= current_path + '/src/data/language_dict.csv')
-    df_movie_country_processed = process_movie_dictionaries(df_movie_metadata_A['Movie Country'], output_csv_path=current_path +'/src/data/country_dict.csv')
+    df_movie_language_processed = process_movie_dictionaries(df_movie_metadata_A['Movie Language'], language_dict_path='./src/data/language_dict.csv', translation_csv_path='./Extra/language_dict.csv', translated_csv_path=  current_path + '/src/data/language_translated.csv')
+    df_movie_country_processed = process_movie_countries(df_movie_metadata_A['Movie Country'], country_dict_path='./src/data/country_dict.csv', translation_csv_path='./Extra/country_dict.csv',translated_csv_path= current_path + '/src/data/country_translated.csv')
 
     # Combine the preprocessed movie data into a single DataFrame
     df_movie_metadata_B = pd.DataFrame({
