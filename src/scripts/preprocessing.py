@@ -3,6 +3,9 @@ import numpy as np
 import ast
 import re
 import os
+import warnings
+
+warnings.filterwarnings("ignore")
 
 def change_height(data_raw):
     """
