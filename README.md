@@ -125,11 +125,11 @@ This score gives us the disparity between male and women. It takes the absolute 
 
 3. Statistical analysis:
 
-  To assess diversity's evolution, yearly average or median diversity scores are analyzed using linear or polynomial regression for trends, with significance tested via R² and p-values.
+    To assess diversity's evolution, yearly average or median diversity scores are analyzed using linear or polynomial regression for trends, with significance tested via R² and p-values.
 
-  Exploring the link between diversity and box office revenue, we found that diverse movies often outperform non-diverse ones in revenue metrics. Pearson's correlation revealed a positive association (p-value < 0.05).
+    Exploring the link between diversity and box office revenue, we found that diverse movies often outperform non-diverse ones in revenue metrics. Pearson's correlation revealed a positive association (p-value < 0.05).
 
-  However, confounding factors like release dates, languages, and production countries may bias results. We propose balancing datasets using propensity score matching, reanalyzing trends, and conducting sensitivity analysis to ensure robust conclusions about diversity's economic impact.
+    However, confounding factors like release dates, languages, and production countries may bias results. We propose balancing datasets using propensity score matching, reanalyzing trends, and conducting sensitivity analysis to ensure robust conclusions about diversity's economic impact.
 
 5. Archtypes
 - Additional Dataset: For the second question we wanted to obtain a new column that would contain stereotipycal roles. For example Batman should have at least superhero as a stereotipycal. To obtain this we queried Wikidata to obtain the occupations of a character. The query was made possible by using the Freebase Character ID. This new dataset contains 5,831 rows, and can be considered a subset of the old one. Our visualization do not suggest any biases introduced by the subselection induced by the response of Wikidata. Nevertheless additional tests may be valuable to strengthen our confidence in this new data.
