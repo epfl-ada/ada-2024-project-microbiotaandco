@@ -295,6 +295,7 @@ def preprocessing_datasets():
     ## Preprocessing of Character Metadata
     df_character_metadata_A = df_character_metadata[['Freebase Movie ID','Actor Name', 'Actor Gender', 'Actor Height', 'Actor Ethnicity', 'Actor age at movie realise']]
    
+    print("Creation of the compact dataset...")
     ## Actor Height
     # Create a new DataFrame with specific columns
     df_actor_height = df_character_metadata_A[['Actor Name', 'Actor Height']].copy()
@@ -324,7 +325,7 @@ def preprocessing_datasets():
     # Ensure that all ethnicities are taken into account
     df_character_ethnicities['Ethnicity'] = df_character_ethnicities['Ethnicity'].apply(split)
     df_character_ethnicities['Country of Origin'] = df_character_ethnicities['Country of Origin'].apply(split)
-        
+
     ## Age
     # Process the 'Actor age at movie realise' column
     df_actor_ages = df_character_metadata_A['Actor age at movie realise']
@@ -349,8 +350,8 @@ def preprocessing_datasets():
     df_movie_release_date = pd.to_numeric(df_movie_release_date, errors='coerce')
 
     # Process Movie Language
-    df_movie_language_processed = process_movie_dictionaries(df_movie_metadata_A['Movie Language'], output_csv_path= current_path + '/data/language_dict.csv')
-    df_movie_processed = process_movie_dictionaries(df_movie_metadata_A['Movie Language'], output_csv_path=current_path +'/data/language_dict.csv')
+    df_movie_language_processed = process_movie_dictionaries(df_movie_metadata_A['Movie Language'], output_csv_path= current_path + '/src/data/language_dict.csv')
+    df_movie_country_processed = process_movie_dictionaries(df_movie_metadata_A['Movie Country'], output_csv_path=current_path +'/src/data/country_dict.csv')
 
     # Combine the preprocessed movie data into a single DataFrame
     df_movie_metadata_B = pd.DataFrame({
@@ -358,7 +359,7 @@ def preprocessing_datasets():
         'Movie Release Date': df_movie_release_date, 
         'Movie Box Office Revenue': df_movie_metadata_A['Movie Box Office Revenue'],
         'Movie Language': df_movie_language_processed, 
-        'Movie Country': df_movie_processed
+        'Movie Country': df_movie_country_processed
     })
 
     ## Merge DataFrames on 'Freebase Movie ID'
@@ -384,4 +385,8 @@ def preprocessing_datasets():
 
     # Save the preprocessed and exploded datasets
     df_metadata_OI_compact.to_csv(current_path + '/data/metadata_OI_compact.csv', index=False)
+    print("done.")
+
+    print("Creation of the exploded dataset...")
     df_metadata_OI_exploded.to_csv(current_path + '/data/metadata_OI_exploded.csv', index=False)
+    print("done.")
