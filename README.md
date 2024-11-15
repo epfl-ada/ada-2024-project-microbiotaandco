@@ -162,7 +162,7 @@ We also decided  that amongst the  30 most represented countries, we would calcu
     Finally we must consider the unseen factors : We propose to perform a sensitivity analysis in order to take them into account. 
 
 5. Archtypes
-- ## Additional Dataset:
+- Additional Dataset:
 
 For the second question we wanted to obtain a new column that would contain stereotipycal roles. For example Batman should have at least superhero as a stereotipycal. To obtain this we queried Wikidata to obtain the occupations of a character. The query was made possible by using the Freebase Character ID. This new dataset contains 5,831 rows, and can be considered a subset of the old one. Our visualization do not suggest any biases introduced by the subselection induced by the response of Wikidata. Nevertheless Additional tests may be valuable to strengthen our confidence in this new data.
 
