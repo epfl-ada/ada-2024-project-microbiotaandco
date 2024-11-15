@@ -66,6 +66,36 @@ Lou Houngbedji, Matej Soumillion, Antea Ceko, Maurice Gauché, Yohann Calixte De
 ## :computer: Methods 
 
 1. Data preprocessing:
+The aim of our preprocessing was to integrate character metadata and movie metadata while retaining only the features of interest: ‘Freebase Movie ID’, ‘Movie Release Date’, ‘Movie Box Office Revenue’, ‘Movie Language’, ‘Movie Country’, ‘Actor Gender’, ‘Actor Height’, ‘Actor Age’, and ‘Actor Ethnicity’. Additionally, a new feature, ‘Actor Country of Origin’, was created.
+
+The preprocessing steps were guided by observations made on the two datasets.
+
+Character Metadata:
+For the character metadata, we cleaned the ‘Actor Height’, ‘Actor Age’, and ‘Actor Ethnicity’ columns and added the new ‘Actor Country of Origin’ feature.
+
+1.	Height Cleaning:
+The dataset contained erroneous values for actor heights, such as 180m and 510m for Zorhem Weiss, Vince Corazza, and Benedic Smith. These values were corrected based on actual measurements where available (e.g., 1.78m). For Zorhem Weiss, where no reliable information was found, the height was replaced with NaN. Heights were also rounded to one decimal place to facilitate grouping.
+
+2.	Age Cleaning:
+Some actor ages at the time of the movie release were negative, with extreme values such as -7896 years. All negative ages were replaced with NaN.
+
+3.	Ethnicity Cleaning:
+Ethnicity identifiers were translated using WikiData and grouped based on subjective categories. For example, ‘French American’ and ‘Dutch American’ were categorized under ‘European American’. A new ‘Actor Country of Origin’ column was derived by associating each ethnicity with its corresponding country (e.g., ‘European American’ was linked to ‘United States of America’). Both columns contain lists of strings representing ethnicities and countries of origin.
+
+Movie Metadata:
+For the movie metadata, we focused on cleaning the ‘Movie Release Date’, ‘Movie Language’, and ‘Movie Country’ columns.
+
+1.	Release Date Formatting:
+Dates were recorded in varying formats, such as ‘yyyy’ and ‘yyyy.mm.dd’. To standardize the data, only the first four characters of each date were retained, corresponding to the year, and converted into numeric values.
+
+2.	Language and Country Cleaning:
+The ‘Movie Language’ and ‘Movie Country’ columns contained dictionary-like structures. We extracted and retained the mappings while grouping similar values. For example, ‘Standard Cantonese’ and ‘Cantonese’ were merged into ‘Cantonese’, and ‘United Kingdom’, ‘Kingdom of Great Britain’, and ‘England’ were unified as ‘United Kingdom’. Both columns now contain lists of strings.
+
+Final Dataset:
+The two datasets were ultimately merged into a single dataset containing the selected attributes. Rows with NaN values were removed to ensure data quality. Two versions of the final dataset were saved:
+1.	A ‘compact’ version, where columns for countries, ethnicities, and languages contained lists of strings.
+2.	An ‘exploded’ version, where all list values were flattened for analysis.
+
 
 2. Exploratory data analysis:
 
