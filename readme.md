@@ -148,6 +148,14 @@ We then propose to rebalance the datasets by calculating a propensity score, and
 We can then reperform the analysis and see if the results of the analysis will be proven.
 Finally we must consider the unseen factors : We propose to perform a sensitivity analysis in order to take them into account. 
 
+5. Archtypes
+- Dataset: 
+::: danger
+MAURICE
+:::
+- Observational analysis:
+    The analysis was done by plotting the distributions of gender, height, age, country of origin and ethnicity for each role that had at least 75 characters in the dataset.
+    A Chi2 test was done to test if the repartition for each feature on all the archetypes with more than 75 characters in the dataset.
 
 
 ## :hourglass: Proposed timeline
