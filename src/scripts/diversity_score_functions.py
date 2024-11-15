@@ -1,3 +1,6 @@
+import pandas as pd
+import numpy as np
+
 def calculate_gender_diversity(df):
     count_male = (df['Actor Gender'] == 'M').sum()
     count_female = (df['Actor Gender'] == 'F').sum()
