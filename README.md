@@ -165,7 +165,7 @@ For the next milestone, we will organize ourselves in a similar way. This means 
 
 ## Questions for TAs
 
-
+If with further analysis that the subdataset is not very biased, is reasonable to make further analysis on it? especially "movie release date" analysis, because it is the variable being the most biased?
 
 
 ------------------------------------------------------------------------
