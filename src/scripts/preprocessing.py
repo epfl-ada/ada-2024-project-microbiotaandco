@@ -365,6 +365,9 @@ def preprocessing_datasets():
     # Display the resulting DataFrame and save to CSV
     df_metadata_OI_compact = df_metadata_OI_compact[['Freebase Movie ID', 'Movie Release Date', 'Movie Box Office Revenue', 'Movie Language', 'Movie Country', 'Actor Gender','Actor Height', 'Actor Age', 'Actor Ethnicity', 'Actor Country of Origin']]
 
+    # Removing NAs
+    df_metadata_OI_compact = df_metadata_OI_compact.dropna()
+
     ## Creation of the exploded dataset
     df_metadata_OI_exploded = df_metadata_OI_compact
     columns_to_explode = ['Movie Language', 'Movie Country', 'Actor Ethnicity', 'Actor Country of Origin']
@@ -379,4 +382,5 @@ def preprocessing_datasets():
     # Save the preprocessed and exploded datasets
     df_metadata_OI_compact.to_csv('../../data/metadata_OI_compact.csv', index=False)
     df_metadata_OI_exploded.to_csv('../../data/metadata_OI_exploded.csv', index=False)
+
 
