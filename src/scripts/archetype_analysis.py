@@ -6,7 +6,7 @@ from scipy.stats import chi2_contingency
 
 # Data import and Data manipulation
 characters = pd.read_csv("src/data/characters_preprocessed_for_archetype.csv")
-archetypes = pd.read_csv("src/data/final_data.csv")
+archetypes = pd.read_csv("src/data/Extracted_Data.csv")
 archetypes = archetypes.rename(columns = {'Character_name' : 'Character Name', 'Freebase_movie_ID' : 'Freebase Movie ID', 'Actor_name' : 'Actor Name'})
 df = pd.merge(characters, archetypes, how = 'inner', on = ["Freebase Movie ID", "Actor Name"])
 df = df.dropna(subset=["Actor Name", "Occupation Labels"])
