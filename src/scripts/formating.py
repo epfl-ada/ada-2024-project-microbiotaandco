@@ -1,5 +1,6 @@
 import pandas as pd
 import json 
+import os
 
 
 def formating_datasets():
@@ -26,11 +27,14 @@ def formating_datasets():
     - 'tvtropes_clusters.csv'
     """
     # Load raw datasets
-    character_metadata = pd.read_csv("/src/data/character.metadata.tsv", sep='\t', header=None)
-    movie_metadata = pd.read_csv("/src/data/movie.metadata.tsv", sep="\t", header=None)
-    name_clusters = pd.read_csv("/src/data/name.clusters.txt", sep="\t", header=None)
-    plot_summaries = pd.read_csv("/src/data/plot_summaries.txt", sep="\t", header=None)
-    tvtropes_clusters = pd.read_csv("/src/data/tvtropes.clusters.txt", sep="\t", header=None)
+    current_path = os.getcwd()
+    print(current_path)
+
+    character_metadata = pd.read_csv(current_path + "/src/data/character.metadata.tsv", sep='\t', header=None)
+    movie_metadata = pd.read_csv(current_path + "/src/data/movie.metadata.tsv", sep="\t", header=None)
+    name_clusters = pd.read_csv(current_path + "/src/data/name.clusters.txt", sep="\t", header=None)
+    plot_summaries = pd.read_csv(current_path + "/src/data/plot_summaries.txt", sep="\t", header=None)
+    tvtropes_clusters = pd.read_csv(current_path + "/src/data/tvtropes.clusters.txt", sep="\t", header=None)
 
     # --- Character Metadata ---
     # Add column names for character metadata
@@ -41,7 +45,8 @@ def formating_datasets():
         "Freebase Character Map ID", "Freebase character ID", "Freebase actor ID"
     ]
     # Save formatted dataset
-    character_metadata.to_csv('/src/data/character_metadata.csv', index=False)
+    character_metadata.to_csv(current_path + '/src/data/character_metadata.csv', index=False)
+    print("The character metadata is formated.")
 
     # --- Movie Metadata ---
     # Add column names for movie metadata
@@ -49,21 +54,24 @@ def formating_datasets():
         "Wikipedia Movie ID", "Freebase Movie ID", "Movie Name", "Movie Release Date",
         "Movie Box Office Revenue", "Movie Runtime", "Movie Language",
         "Movie Country", "Movie Genre"
-    ]
+    ] 
     # Save formatted dataset
-    movie_metadata.to_csv('/src/data/movie_metadata.csv', index=False)
+    movie_metadata.to_csv(current_path + '/src/data/movie_metadata.csv', index=False)
+    print("The movie metadata is formated.")
 
     # --- Name Clusters ---
     # Add column names for name clusters
     name_clusters.columns = ["Character Name", "Freebase Character Map ID"]
     # Save formatted dataset
-    name_clusters.to_csv('/src/data/name_clusters.csv', index=False)
+    name_clusters.to_csv(current_path + '/src/data/name_clusters.csv', index=False)
+    print("The name cluster is formated.")
 
     # --- Plot Summaries ---
     # Add column names for plot summaries
     plot_summaries.columns = ["Wikipedia Movie ID", "Summary"]
     # Save formatted dataset
-    plot_summaries.to_csv('/src/data/plot_summaries.csv', index=False)
+    plot_summaries.to_csv(current_path + '/src/data/plot_summaries.csv', index=False)
+    print("The plot summaries is metadata is formated.")
 
     # --- TV Tropes Clusters ---
     # Add column names for TV tropes clusters
@@ -90,4 +98,5 @@ def formating_datasets():
     tvtropes_clusters = tvtropes_clusters.rename(columns={"id": "Freebase Character Map ID"})
 
     # Save the formatted TV tropes clusters dataset
-    tvtropes_clusters.to_csv('/src/data/tvtropes_clusters.csv', index=False)
+    tvtropes_clusters.to_csv(current_path + '/src/data/tvtropes_clusters.csv', index=False)
+    print('The TV tropes clusters is formated.')

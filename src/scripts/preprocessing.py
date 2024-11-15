@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import ast
 import re
+import os
 
 def change_height(data_raw):
     """
@@ -284,10 +285,12 @@ def preprocessing_datasets():
           - `metadata_OI_exploded.csv`: The exploded version with lists expanded.
 
     """
+    current_path = os.getcwd()
+    print(current_path)
     
     # Load character and movie metadata
-    df_character_metadata = pd.read_csv("../data/character_metadata.csv")
-    df_movie_metadata = pd.read_csv("../data/movie_metadata.csv")
+    df_character_metadata = pd.read_csv(current_path + "/src/data/character_metadata.csv")
+    df_movie_metadata = pd.read_csv(current_path + "/src/data/movie_metadata.csv")
 
     ## Preprocessing of Character Metadata
     df_character_metadata_A = df_character_metadata[['Freebase Movie ID','Actor Name', 'Actor Gender', 'Actor Height', 'Actor Ethnicity', 'Actor age at movie realise']]
@@ -305,10 +308,10 @@ def preprocessing_datasets():
     ## Actor Ethnicity
     # Create a file with all the ethnicity IDs for translation
     df_ethnicities = df_character_metadata_A['Actor Ethnicity'].value_counts().reset_index()
-    df_ethnicities.to_csv('../data/ethnicity.csv')
+    df_ethnicities.to_csv(current_path + '/src/data/ethnicity.csv')
 
     # Load the edited ethnicity file with translations and other classification columns
-    df_ethnicities_translated = pd.read_csv('../data/ethnicity_translated.csv', sep=';')
+    df_ethnicities_translated = pd.read_csv( current_path + '/src/data/ethnicity_translated.csv', sep=';')
 
     # Replace ethnicity IDs with translated ethnicities and add country of origin
     df_character_ethnicities = pd.DataFrame(df_character_metadata_A['Actor Ethnicity'])
@@ -346,8 +349,8 @@ def preprocessing_datasets():
     df_movie_release_date = pd.to_numeric(df_movie_release_date, errors='coerce')
 
     # Process Movie Language
-    df_movie_language_processed = process_movie_dictionaries(df_movie_metadata_A['Movie Language'], output_csv_path='../data/language_dict.csv')
-    df_movie_processed = process_movie_dictionaries(df_movie_metadata_A['Movie Language'], output_csv_path='../data/language_dict.csv')
+    df_movie_language_processed = process_movie_dictionaries(df_movie_metadata_A['Movie Language'], output_csv_path= current_path + '/data/language_dict.csv')
+    df_movie_processed = process_movie_dictionaries(df_movie_metadata_A['Movie Language'], output_csv_path=current_path +'/data/language_dict.csv')
 
     # Combine the preprocessed movie data into a single DataFrame
     df_movie_metadata_B = pd.DataFrame({
@@ -380,7 +383,5 @@ def preprocessing_datasets():
     df_metadata_OI_exploded = df_metadata_OI_exploded.reset_index(drop=True)
 
     # Save the preprocessed and exploded datasets
-    df_metadata_OI_compact.to_csv('../../data/metadata_OI_compact.csv', index=False)
-    df_metadata_OI_exploded.to_csv('../../data/metadata_OI_exploded.csv', index=False)
-
-
+    df_metadata_OI_compact.to_csv(current_path + '/data/metadata_OI_compact.csv', index=False)
+    df_metadata_OI_exploded.to_csv(current_path + '/data/metadata_OI_exploded.csv', index=False)
