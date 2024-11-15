@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+
 df_yearly = Diversity_movie_metadata.groupby('Movie Release Date')['gender_score'].mean().reset_index()
 
 plt.figure(figsize=(12, 6))
