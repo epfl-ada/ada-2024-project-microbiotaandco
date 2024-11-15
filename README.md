@@ -1,4 +1,4 @@
-# *Title: The evolution of diversity in film industry :film_projector:*
+# *The evolution of diversity in film industry* :film_projector:
 
 ### *Applied Data Analysis CS-401- team MicrobiotaAndCo, EPFL* 
 
@@ -59,8 +59,22 @@ Lou Houngbedji, Matej Soumillion, Antea Ceko, Maurice Gauché, Yohann Calixte De
 
 ### Directory structure
 
+The directory structure of new project looks like this:
 
-### How to use the library
+```
+├── data                        <- Project data files
+│
+├── src                         <- Source code
+│   ├── data                            <- Data directory
+│   ├── scripts                         <- Shell scripts
+│
+├── results.ipynb               <- a well-structured notebook showing the results
+│
+├── requirements.txt        <- File for installing python dependencies
+└── README.md
+```
+### How to use the results
+Open the notebook results.ipynb and run the cells, the results will be displayed.
 
 
 ## :computer: Methods 
@@ -68,85 +82,84 @@ Lou Houngbedji, Matej Soumillion, Antea Ceko, Maurice Gauché, Yohann Calixte De
 1. Data preprocessing:
 The aim of our preprocessing was to integrate character metadata and movie metadata while retaining only the features of interest: ‘Freebase Movie ID’, ‘Movie Release Date’, ‘Movie Box Office Revenue’, ‘Movie Language’, ‘Movie Country’, ‘Actor Gender’, ‘Actor Height’, ‘Actor Age’, and ‘Actor Ethnicity’. Additionally, a new feature, ‘Actor Country of Origin’, was created.
 
-The preprocessing steps were guided by observations made on the two datasets.
+    The preprocessing steps were guided by observations made on the two datasets.
 
-Character Metadata:
+    **Character Metadata**:
 For the character metadata, we cleaned the ‘Actor Height’, ‘Actor Age’, and ‘Actor Ethnicity’ columns and added the new ‘Actor Country of Origin’ feature.
 
-1.	Height Cleaning:
+    - 	Height Cleaning:
 The dataset contained erroneous values for actor heights, such as 180m and 510m for Zorhem Weiss, Vince Corazza, and Benedic Smith. These values were corrected based on actual measurements where available (e.g., 1.78m). For Zorhem Weiss, where no reliable information was found, the height was replaced with NaN. Heights were also rounded to one decimal place to facilitate grouping.
 
-2.	Age Cleaning:
+    - Age Cleaning:
 Some actor ages at the time of the movie release were negative, with extreme values such as -7896 years. All negative ages were replaced with NaN.
 
-3.	Ethnicity Cleaning:
+    - Ethnicity Cleaning:
 Ethnicity identifiers were translated using WikiData and grouped based on subjective categories. For example, ‘French American’ and ‘Dutch American’ were categorized under ‘European American’. A new ‘Actor Country of Origin’ column was derived by associating each ethnicity with its corresponding country (e.g., ‘European American’ was linked to ‘United States of America’). Both columns contain lists of strings representing ethnicities and countries of origin.
 
-Movie Metadata:
+    **Movie Metadata**:
 For the movie metadata, we focused on cleaning the ‘Movie Release Date’, ‘Movie Language’, and ‘Movie Country’ columns.
 
-1.	Release Date Formatting:
+    -    Release Date Formatting:
 Dates were recorded in varying formats, such as ‘yyyy’ and ‘yyyy.mm.dd’. To standardize the data, only the first four characters of each date were retained, corresponding to the year, and converted into numeric values.
 
-2.	Language and Country Cleaning:
+    -    Language and Country Cleaning:
 The ‘Movie Language’ and ‘Movie Country’ columns contained dictionary-like structures. We extracted and retained the mappings while grouping similar values. For example, ‘Standard Cantonese’ and ‘Cantonese’ were merged into ‘Cantonese’, and ‘United Kingdom’, ‘Kingdom of Great Britain’, and ‘England’ were unified as ‘United Kingdom’. Both columns now contain lists of strings.
 
-Final Dataset:
+    **Final Dataset**:
 The two datasets were ultimately merged into a single dataset containing the selected attributes. Rows with NaN values were removed to ensure data quality. Two versions of the final dataset were saved:
-1.	A ‘compact’ version, where columns for countries, ethnicities, and languages contained lists of strings.
-2.	An ‘exploded’ version, where all list values were flattened for analysis.
+    - A ‘compact’ version, where columns for countries, ethnicities, and languages contained lists of strings.
+    - An ‘exploded’ version, where all list values were flattened for analysis.
 
 
 2. Exploratory data analysis:
 
-- Data form visualization
-- Attributes distribution analysis
-- Bivariate analysis 
-- Correlation analysis
-- Chi2 tests
+    - Data form visualization
+    - Attributes distribution analysis
+    - Bivariate analysis 
+    - Correlation analysis
+    - Chi2 tests
 
 3. Data analysis: 
 
-- Diversity score computation:
-- We decided to calculate the gender scores with the the formula :
--)1-abs(pf-ph).
+    - Diversity score computation:
+        - We decided to calculate the gender scores with the following formula : 
+**1-abs(female proportionality - male proportionality)**
 This score gives us the disparity between male and women. It takes the absolute values in difference. That way, if we have no difference in the proportions, this will mean that the difference will be 0 and we will get a score of 1, If we have three quarters of men vs a quarter of woman, we will get a score of 0.5. Meanwhile, if we have one hundred percent, there will be a score of 0. This means that ‘’ diversity’’ is defined as half-half.
--For the height score, the age score, and the diversity score, we decide to utilize the Simpson’s diversity Index, since we are dealing with diversity in categorical feature. Simpson’s formula is particularly useful as it accounts for both richness (the number of unique categories) and evenness (how uniformly the categories are represented). Here, the optimal diversity would be represented by every actor being a different ethnicity/age range/ height range from the others.
--For the foreign actor score, we have a metric where more foreign actors means more diversity. As such, there is a very obvious metric we could use:
+        - For the height score, the age score, and the diversity score, we decide to utilize the Simpson’s diversity Index, since we are dealing with diversity in categorical feature. Simpson’s formula is particularly useful as it accounts for both richness (the number of unique categories) and evenness (how uniformly the categories are represented). Here, the optimal diversity would be represented by every actor being a different ethnicity/age range/ height range from the others.
+        - For the foreign actor score, we have a metric where more foreign actors means more diversity. As such, there is a very obvious metric we could use:
 The proportion of actors whose country of origin. A movie with only foreign actors will get a score.
 Finally, to compute the mean score, we decided to compute the mean of the various diversity scores.
 By averaging, we can capture a holistic sense of diversity across various attributes,  it is easier to compare datasets or groups on an equal footing without overemphasizing any single category.
 
-- Diversity distribution over time and countries.
+    - Diversity distribution over time and countries.
   We took the mean diversity scores for each year, and proceeded to plot them as time series and performed linear regression on them. Calculating the mean diversity score for each year helped us identify overarching trends in diversity over time, smoothing out fluctuations caused by individual outliers or specific movies in a given year The thing we notice is that ,unsurprisingly, the coefficients are positive for most diversity score over time, so diversity seems to increase over time.
-
 We also decided  that amongst the  30 most represented countries, we would calculate the mean diversity score of each country, and then rank them from largest to lowest. This allows us to observe that the distribution is different amongst countries. For instance, South Africa has a very low ethnicity score while Brazil has a very high one. The second observation is that the distributions are different for the categories. Austria scores high for gender diversity but not as high for ethnicity diversity.
 
 
 4. Statistical analysis:
 
-In order to study if diversity has evolved over time and its evolution, it is possible to analyze its trajectory with the average or median diversity scores per year. This can be done by plotting the diversity scores over time (years), which allows for the identification of an eventual trend. Once a trend is identified, if there is one, linear regression can be applied to model the relationship between time and a specific diversity. Linear regression can help in providing insights into whether the trend is increasing or decreasing overall (slope of the regression line).
+    In order to study if diversity has evolved over time and its evolution, it is possible to analyze its trajectory with the average or median diversity scores per year. This can be done by plotting the diversity scores over time (years), which allows for the identification of an eventual trend. Once a trend is identified, if there is one, linear regression can be applied to model the relationship between time and a specific diversity. Linear regression can help in providing insights into whether the trend is increasing or decreasing overall (slope of the regression line).
 
-If no trend can be established with linear regression or if it is not significant, polynomial regression can be used to capture more complex, non-linear trends. 
+    If no trend can be established with linear regression or if it is not significant, polynomial regression can be used to capture more complex, non-linear trends. 
 
-After establishing a possible trend, a statistical assessment is necessary to evaluate the significance of it. This can be done using the R² score to assess how well the model explains the variability in diversity scores (higher R² value means the model is a good fit). 
-Additionally, statistical tests such as t-tests or ANOVA can be used to verify if the observed trend is statistically significant, excluding the possibility that the trend occurred randomly. The p-value obtained from the regression model will be used to test the null hypothesis that there is no trend in diversity over time.
+    After establishing a possible trend, a statistical assessment is necessary to evaluate the significance of it. This can be done using the R² score to assess how well the model explains the variability in diversity scores (higher R² value means the model is a good fit). 
+    Additionally, statistical tests such as t-tests or ANOVA can be used to verify if the observed trend is statistically significant, excluding the possibility that the trend occurred randomly. The p-value obtained from the regression model will be used to test the null hypothesis that there is no trend in diversity over time.
 
 
-In recent years, the phrase "Get woke, go broke" has emerged as a contentious expression, suggesting that efforts by media companies to prioritize diversity in casting may come at a financial cost. 
-We decided to conduct an observational study on the causal relationship between the overall diversity score and the Movie Box Office Revenue.
-We first decided to split the dataset in half : the ‘’diverse’’ set in the upper half  and the non diverse set with their diversity score below the median.
-After this, we could perform a naive analysis, by plotting the distribution of the two set’s movie revenues. We also observe the means, quartiles and medians, and the overall results seem to point out that diverse movies tend to fare better economically. We observe that  the mean, quartiles, min and median box office revenues are all higher for the diverse set.
-We use pearsons correlation. it is well-suited for examining the relationship between diversity scores and box office revenue because it quantifies the strength and direction of the linear association between these two continuous variables. By using Pearson’s correlation, we can directly assess whether higher diversity scores are consistently associated with changes in revenue, whether positive or negative. With a p-value below 0.05, we reject the null hypothesis that the two values are independent.
-However, this is a naive analysis. We are failing to take into account observable factors that might affect the probability of a movie being diverse such as :
--movie release date
--Movie countries
--movie languages.
-We observe through the bar plots that the diverse dataset has a larger share of movies with more than one language and more than one country. It also has more movies with very high language counts. This is problematic as these might be factors that influence both the chances of a movie being diverse and the revenue, and might therefore bias our conclusion.
-The boxplot shows us the quartiles of the non diverse movies tend to be older. This might also be problematic as we need to account for the fact that modern movies might make more money  and modern movies might be more diverse.
-We then propose to rebalance the datasets by calculating a propensity score, and do a match 1 to 1 of the dataset. This way we will eliminate these three potential factors from the causal links.
-We can then reperform the analysis and see if the results of the analysis will be proven.
-Finally we must consider the unseen factors : We propose to perform a sensitivity analysis in order to take them into account. 
+    In recent years, the phrase "Get woke, go broke" has emerged as a contentious expression, suggesting that efforts by media companies to prioritize diversity in casting may come at a financial cost. 
+    We decided to conduct an observational study on the causal relationship between the overall diversity score and the Movie Box Office Revenue.
+    We first decided to split the dataset in half : the ‘’diverse’’ set in the upper half  and the non diverse set with their diversity score below the median.
+    After this, we could perform a naive analysis, by plotting    the distribution of the two set’s movie revenues. We also observe the means, quartiles and medians, and the overall results seem to point out that diverse movies tend to fare better economically. We observe that  the mean, quartiles, min and median box office revenues are all higher for the diverse set.
+    We use pearsons correlation. it is well-suited for examining the relationship between diversity scores and box office revenue because it quantifies the strength and direction of the linear association between these two continuous variables. By using Pearson’s correlation, we can directly assess whether higher diversity scores are consistently associated with changes in revenue, whether positive or negative. With a p-value below 0.05, we reject the null hypothesis that the two values are independent.
+    However, this is a naive analysis. We are failing to take into account observable factors that might affect the probability of a movie being diverse such as :
+    - Movie release date
+    - Movie countries
+    - Movie languages.
+    We observe through the bar plots that the diverse dataset has a larger share of movies with more than one language and more than one country. It also has more movies with very high language counts. This is problematic as these might be factors that influence both the chances of a movie being diverse and the revenue, and might therefore bias our conclusion.
+    The boxplot shows us the quartiles of the non diverse movies tend to be older. This might also be problematic as we need to account for the fact that modern movies might make more money  and modern movies might be more diverse.
+    We then propose to rebalance the datasets by calculating a propensity score, and do a match 1 to 1 of the dataset. This way we will eliminate these three potential factors from the causal links.
+    We can then reperform the analysis and see if the results of the analysis will be proven.
+    Finally we must consider the unseen factors : We propose to perform a sensitivity analysis in order to take them into account. 
 
 5. Archtypes
 - Dataset: 
@@ -172,26 +185,6 @@ MAURICE
     - Create the data story with what we want to show
     - Imagine how the interaction/animation would work
     - Code the website
-
-:white_square_button:
-
-:white_square_button:
-
-:white_square_button:
-
-:white_square_button:
-
-:white_square_button:
-
-:white_square_button:
-
-:white_square_button:
-
-:white_square_button:
-
-:white_square_button:
-
-:white_square_button:
 
 ## Organization within the team
 
