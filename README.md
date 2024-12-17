@@ -23,7 +23,7 @@ This project is divided into two sub-analyses addressing the following general q
 
 GO WOKE, GO BROKE? 
 
-
+[![Spiderman_meme_GWGB](https://github.com/user-attachments/assets/1a98a0e3-d08e-4c90-8833-bc5e8f7da367)](https://louhy12.github.io/film-reel-website/)
 
 Click here :point_right: ["GO WOKE, GO BROKE?"](https://louhy12.github.io/film-reel-website/) to discover the datastory.  
 
