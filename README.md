@@ -15,17 +15,11 @@ This project is important as it can provide a data-driven approach to understand
 
 ## :mag_right: Research questions 
 
-This project is divided into two sub-analyses addressing the following general questions:
+This project investigates how actor diversity, based on attributes like gender, ethnicity, height, and age at the time of a movie’s release, has evolved over time and varies across countries, while also exploring shifts in stereotypical roles or archetypes in films and their connection to these attributes across cultures and eras.
 
-1. How has actor diversity evolved over time based on attributes such as gender, ethnicity, height, and age at the time of a movie’s release, and what trends in diversity can be observed across different countries?
-
-2. How have stereotypical roles or archetypes in films changed over time, and how are specific attributes (e.g., gender, ethnicity) linked to character roles? Furthermore, have these patterns shifted over time and across different cultures?
-
-GO WOKE, GO BROKE? 
+We examine therefore whether increasing diversity in film casts and evolving character archetypes, align with the ["GO WOKE, GO BROKE?"](https://louhy12.github.io/film-reel-website/) narrative by analyzing trends over time and across countries. 
 
 [![Spiderman_meme_GWGB](https://github.com/user-attachments/assets/1a98a0e3-d08e-4c90-8833-bc5e8f7da367)](https://louhy12.github.io/film-reel-website/)
-
-Click here :point_right: ["GO WOKE, GO BROKE?"](https://louhy12.github.io/film-reel-website/) to discover the datastory.  
 
 
 
@@ -70,7 +64,7 @@ Open the notebook results.ipynb and run the cells, the results will be displayed
 
 ### The dataset
 
-The CMU Movie Summary Corpus is a a collection of 42,306 movie plot summaries and metadata at both the movie level and character level.  
+The CMU Movie Summary Corpus is a a collection of 42,306 movie plot summaries and metadata at both the movie and character level.  
 
 This data supports work in the following paper:
 
@@ -91,7 +85,7 @@ To analyze these questions, we formulated several sub-questions that serve as th
 - Are there common combinations of characteristics linked to specific archetypes?
 - Are the results statistically significant? 
 
-1. Data preprocessing:
+0. Data preprocessing:
 The aim of our preprocessing was to integrate character metadata and movie metadata while retaining only the features of interest: ‘Freebase Movie ID’, ‘Movie Release Date’, ‘Movie Box Office Revenue’, ‘Movie Language’, ‘Movie Country’, ‘Actor Gender’, ‘Actor Height’, ‘Actor Age’, and ‘Actor Ethnicity’. Additionally, a new feature, ‘Actor Country of Origin’, was created.
 
     The preprocessing steps were guided by observations made on the two datasets.
@@ -107,7 +101,7 @@ For the movie metadata, we focused on cleaning the ‘Movie Release Date’, ‘
 Dates were recorded in varying formats, such as ‘yyyy’ and ‘yyyy.mm.dd’. To standardize the data, only the first four characters of each date were retained, corresponding to the year, and converted into numeric values.
 
     -    Language and Country Cleaning:
-The ‘Movie Language’ and ‘Movie Country’ columns contained dictionary-like structures. We extracted and retained the mappings while grouping similar values. For example, ‘Standard Cantonese’ and ‘Cantonese’ were merged into ‘Cantonese’, and ‘United Kingdom’, ‘Kingdom of Great Britain’, and ‘England’ were unified as ‘United Kingdom’. Both columns now contain lists of strings.
+The ‘Movie Language’ and ‘Movie Country’ columns contained dictionary-like structures. We extracted and retained the mappings while grouping similar values. For example, ‘Standard Cantonese’ and ‘Cantonese’ were merged into ‘Cantonese’. Both columns now contain lists of strings.
 
     **Final Dataset**:
 The two datasets were ultimately merged into a single dataset containing the selected attributes. Rows with NaN values were removed to ensure data quality. Two versions of the final dataset were saved:
@@ -133,7 +127,7 @@ This score gives us the disparity between male and women. It takes the absolute 
         -For the foreign actor score, diversity is measured by the proportion of actors from foreign countries, with movies featuring only foreign actors scoring highest. To capture overall diversity, we computed the mean of various diversity scores, providing a balanced metric for comparing datasets without overemphasizing any single attribute.
 
     - Diversity distribution over time and countries.
- We plotted yearly mean diversity scores as a time series, applied linear regression, and observed a positive trend, indicating increasing diversity over time. Additionally, ranking countries by their mean diversity scores revealed variations, such as South Africa scoring low in ethnicity diversity and Austria excelling in gender diversity but not ethnicity.
+ We plotted yearly mean diversity scores as a time series, applied linear regression. 
 
 3. Statistical analysis:
 
@@ -144,6 +138,7 @@ This score gives us the disparity between male and women. It takes the absolute 
     However, confounding factors like release dates, languages, and production countries may bias results. We propose balancing datasets using propensity score matching, reanalyzing trends, and conducting sensitivity analysis to ensure robust conclusions about diversity's economic impact.
 
 5. Archtypes
+
 - Additional Dataset: For the second question we wanted to obtain a new column that would contain stereotipycal roles. For example Batman should have at least superhero as a stereotipycal. To obtain this we queried Wikidata to obtain the occupations of a character. The query was made possible by using the Freebase Character ID. This new dataset contains 5,831 rows, and can be considered a subset of the old one. Our visualization do not suggest any biases introduced by the subselection induced by the response of Wikidata. Nevertheless additional tests may be valuable to strengthen our confidence in this new data.
 
 - Observational analysis:
@@ -152,7 +147,7 @@ This score gives us the disparity between male and women. It takes the absolute 
 
 
 ## :hourglass: Proposed timeline
-1. Finish the analysis (2 weeks)
+1. Finish the analysis
     - Performing a temporality-based analysis
     - Performing a country-based analysis
     - Performing a country and temporal-based analysis
@@ -161,7 +156,7 @@ This score gives us the disparity between male and women. It takes the absolute 
     - If we have time: Try to predict future trends on diversity
     - If we have time: Analyse how global world events (WW2, Cold war, financial crisis...) impact diversity trends in films. Ex: Russian vilains, american heroes etc...
 
-3. Website part (2 sem)
+3. Website part 
     - Create the data story with what we want to show
     - Imagine how the interaction/animation would work
     - Code the website
@@ -175,6 +170,14 @@ In conclusion, during this first phase, we were able to establish a solid founda
 
 For the next milestone, we will organize ourselves in a similar way. This means we will analyse by teams the related questions. The organisation of the coding of the website will be split when we decided what we want to implement.
 
-## Questions for TAs
 
-If with further analysis that the subdataset is not very biased, is reasonable to make further analysis on it? especially "movie release date" analysis, because it is the variable being the most biased?
+Lou Houngbedji:
+
+ Matej Soumillion:
+ 
+  Antea Ceko:
+  
+   Maurice Gauché:
+   
+    Yohann Calixte Dezauzier:
+
