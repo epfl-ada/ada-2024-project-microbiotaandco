@@ -7,7 +7,7 @@ import scipy.stats as stats
 
 # import data
 characters = pd.read_csv("src/data/characters_preprocessed_for_archetype_revenue.csv")
-archetypes = pd.read_csv("../Maurice_M2/final_data.csv")
+archetypes = pd.read_csv("src/data/Extracted_Data.csv")
 
 archetypes = archetypes.rename(columns = {'Character_name' : 'Character Name', 'Freebase_movie_ID' : 'Freebase Movie ID', 'Actor_name' : 'Actor Name'})
 df = pd.merge(characters, archetypes, how = 'inner', on = ["Freebase Movie ID", "Actor Name"])
