@@ -17,15 +17,15 @@ By clarifying these aspects, the project aims to provide insights into the cultu
 
 Our research question focuses on understanding how actor diversity has evolved over time and across countries, and how shifts in stereotypical roles in films are connected to these attributes across different cultures and eras.
 
-We examine therefore whether increasing diversity in film casts and evolving character archetypes, align with the ["GO WOKE, GO BROKE?"](https://louhy12.github.io/film-reel-website/) narrative by analyzing trends over time and across countries. 
+We examine therefore whether increasing diversity in film casts and evolving character archetypes, align with the ["GO WOKE, GO BROKE?"](https://louhy12.github.io/film-reel-website/go-woke-go-broke-really/) narrative by analyzing trends over time and across countries. 
 
-[![Spiderman_meme_GWGB](https://github.com/user-attachments/assets/1a98a0e3-d08e-4c90-8833-bc5e8f7da367)](https://louhy12.github.io/film-reel-website/)
+[![Spiderman_meme_GWGB](https://github.com/user-attachments/assets/1a98a0e3-d08e-4c90-8833-bc5e8f7da367)](https://louhy12.github.io/film-reel-website/go-woke-go-broke-really/)
 
 
 
 ## :handshake: Contributors
 
-Lou Houngbedji, Matej Soumillion, Antea Ceko, Maurice Gauché, Yohann Calixte Dezauzier.
+Lou Houngbedji, Matej Soumillion, Antea Ceko, Maurice Gauché, Yohann Dezauzier.
 
 
 ## :open_book: Setup
@@ -71,16 +71,6 @@ This data supports work in the following paper:
 David Bamman, Brendan O'Connor and Noah Smith, "Learning Latent Personas of Film Characters," in: Proceedings of the Annual Meeting of the Association for Computational Linguistics (ACL 2013), Sofia, Bulgaria, August 2013.
 
 ## :computer: Methods 
-
-The analysis was guided by several sub-questions serving as the guiding framework:
-- How do we treat missing or aberrant values? How do we preprocess the dataset?
-- What are the diversity attributes and how are they distributed?
-- What is the relationship between and among these attributes?
-- How can we define and quantify diversity? 
-- How do diversity scores evolve over time and space?
-- Does the diversity impact box office revenues?
-- Are there common combinations of characteristics linked to specific archetypes?
-- Are the results statistically significant?
 
 
 0. Data preprocessing:
@@ -142,14 +132,19 @@ A first exploratory data analysis phase consisted in visualizing the data, analy
 
 ## Organization within the team
 
-Lou Houngbedji: diversity data preprocessing, website implementation ...
+Lou Houngbedji: diversity data preprocessing, diversity exploratory data analysis (EDA), website implementation.
 
-Matej Soumillion: stereotypical data preprocessing, diversity of archetypes analysis...
 
-Antea Ceko: diversity data preprocessing, diversity time evolution analysis ...
+Matej Soumillion: archetypes visualization and archetypes analysis, archetypes causal analysis.
 
-Maurice Gauché: diversity data preprocessing, causal analysis diversity-box office revenues ...
 
-Yohann Calixte Dezauzier: stereotypical data preprocessing , formulation of the diversity score, diversity contry distribution analysis...
+Antea Ceko: diversity EDA, diversity time evolution and historical analysis, REAME.
+
+
+Maurice Gauché: archetypes data preprocessing, diversity-box office revenues causal analysis.
+
+
+Yohann Dezauzier: causal inference analysis, diversity score implementation, diversity country distribution analysis.
+
 
 In conclusion, we successfully established a solid foundation for collaboration in analyzing our dataset, thereby enabling us to address our research questions and drawing interesting conclusions.
