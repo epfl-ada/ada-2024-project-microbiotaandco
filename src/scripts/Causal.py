@@ -9,7 +9,7 @@ from sklearn.neighbors import NearestNeighbors
 from scipy.stats import pearsonr
 
 
-Diversity_movie_metadata=pd.read_csv('Diversity_movie_metadata.csv')
+Diversity_movie_metadata=pd.read_csv('data/Diversity_movie_metadata.csv')
 
 
 
