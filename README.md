@@ -73,7 +73,7 @@ David Bamman, Brendan O'Connor and Noah Smith, "Learning Latent Personas of Film
 ## :computer: Methods 
 
 
-0. Data preprocessing:
+1. Data preprocessing:
 The aim of our preprocessing was to integrate character metadata and movie metadata while retaining only the features of interest. Additionally, a new feature, ‘Actor Country of Origin’, was created.
 
 Unconsistent data entries were cleaned unconsistent in particular for height, age and the ethnicity. 
@@ -87,40 +87,37 @@ Two versions of the final dataset were saved:
     - An ‘exploded’ version, where all list values were flattened for analysis.
 
 
-1. Exploratory data analysis:
+2. Exploratory data analysis:
 
-A first exploratory data analysis phase consisted in visualizing the data, analyzing the distribution of attributes, as well as their correlation. Bivariate analysis was used to explore preliminarily the presence of possible patterns.
+The initial exploratory data analysis phase involved visualizing the data through univariate analysis, examining the distribution of attributes and their correlations.
 
-    - Chi2 tests ??????????????????????????????????????????????
+3. Data analysis: 
 
-2. Data analysis: 
+ 3.1. Diversity analysis
 
-    - Diversity score computation:
-        - We decided to calculate the gender scores with the following formula : **1-abs(female proportionality - male proportionality)**
+- Diversity scores computation: 
+We decided to calculate the diversity scores(1 being highest and 0 being lowest) for each movie with Simpson diversity index except for the foreign actors where we used proportion of foreigner and gender score where we used 1-|pfemale-pmale|. We then averaged all scores to create the diversity score. We then averaged them by country and time period to see a country's average performance at each time and create maps that could show trends.
 
-        This score gives us the disparity between male and women. If there is no difference in the proportions, the diversity score will result being 1. If we have three quarters of men vs a quarter of woman, we will get a score of 0.5, indicating that "diversity" is defined as half-half.
-        - For the height score, the age score, and the diversity score, we utilize the Simpson’s Diversity Index, which is particularly useful as it accounts for both the number of unique categories and how uniformly the categories are represented. The optimal diversity would be represented by every actor being a different ethnicity/age range/ height range from the others.
-        - For the foreign actor score, diversity is measured by the proportion of actors from foreign countries. 
-        - Finally, to capture overall diversity, we computed the mean of various diversity scores.
-
-    - Diversity distribution over time and countries.
-        Linear regression was employed to identify overall positive or negative trends for each diversity attribute, while polynomial regression provided a deeper time-based analysis, highlighting critical points where curvature changes sign, potentially indicating significant political or societal events. The optimal degree was selected using the highest R-squared score .... TO FINISH
- 
- - Archtypes
-    - Additional Dataset consisting in a new column contain stereotipycal roles. For example Batman should have at least superhero as a stereotipycal. To obtain this we queried Wikidata to obtain the occupations of a character. The query was made possible by using the Freebase Character ID. This new dataset contains 5,831 rows, and can be considered a subset of the old one. Our visualization do not suggest any biases introduced by the subselection induced by the response of Wikidata. Nevertheless additional tests may be valuable to strengthen our confidence in this new data.
-
-    - Observational analysis:
-    The analysis was done by plotting the distributions of gender, height, age, country of origin and ethnicity for each role that had at least 75 characters in the dataset.
-    A Chi2 test was done to test if the repartition for each feature on all the archetypes with more than 75 characters in the dataset.
+- The diversity distribution over time and countries:
+Linear regression was employed to identify overall positive or negative trends for each diversity attribute, while polynomial regression provided a deeper time-based analysis, highlighting critical points where curvature changes sign, potentially indicating significant political or societal events. The optimal degree was selected using the highest R-squared score.
 
 
-3. Statistical analysis:
+3.2. Causal analysis: diversity influence on box office revenues
 
-    To assess diversity's evolution, yearly average or median diversity scores are analyzed using linear or polynomial regression for trends, with significance tested via R² and p-values.
+We split the data into diverse and non diverse  and observed movie revenues. We made sure the datasets were balanced for causal inference using propensity score matching and we also conducted a sensitivity analysis.
 
-    !!!!!!!!!!!!!!!!ADD MAURICE'S PAARRTTT!!!!!!!!!!!
+Another approach to account for control variables is to use residual regression. The idea is to regress linearly the variables of interest, that is diversities scores and Box office revenue on all control variables and then use the obtained residuals to conduct a second linear regression. Residuals are the part of variables that are not explained by the control variables, so comparing them might give insight about direct relationships between the Box office and the different diversity scores.
 
-    However, confounding factors like release dates, languages, and production countries may bias results. We propose balancing datasets using propensity score matching, reanalyzing trends, and conducting sensitivity analysis to ensure robust conclusions about diversity's economic impact.
+
+3.3. Archetype analysis
+
+The analysis was done by bar chart race videos. We only kept archetypes with more than 50 characters related to them. A chi-square test was done for gender and ethnicities repartitions both for the whole set of archetypes and for each individual one.
+
+
+3.4. Causal analysis: diversity influence on box office revenues
+
+We wanted to find out if the disparities in the archetypes lead to a significant change in the revenue. For this we plotted the p-values of a linear regression predicting revenue with archetypes against the p-values of the chi-square tests representing the disparities in archetypes for gender and ethnicity. We then made a linear regression on this data, giving us insights on the significance of archetypes’ disparities on the change in the revenue.
+
 
 ## :hourglass: Project timeline
 
