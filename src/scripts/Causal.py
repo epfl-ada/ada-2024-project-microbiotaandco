@@ -287,8 +287,8 @@ for treatment_node, control_node in matching:
     treatment_score = treated.iloc[treatment_id]['Propensity_score']
     control_score = control.iloc[control_id]['Propensity_score']
 
-    print(f"Treatment ID {treatment_id} (Propensity Score: {treatment_score:.4f}) "
-          f"is matched to Control ID {control_id} (Propensity Score: {control_score:.4f})")
+   # print(f"Treatment ID {treatment_id} (Propensity Score: {treatment_score:.4f}) "
+      #    f"is matched to Control ID {control_id} (Propensity Score: {control_score:.4f})")
     
 matched = [i[0] for i in list(matching)] + [i[1] for i in list(matching)]
 
