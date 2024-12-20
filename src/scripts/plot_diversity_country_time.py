@@ -196,15 +196,13 @@ for i, score in enumerate(diversity_scores):
     df_yearly = data_copy.groupby('Movie Release Date')[diversity_scores[i]].mean().reset_index()
 
     # Define the variables for regression
-    X_centered = df_yearly['Movie Release Date']  # Centering around 1895
+    X_centered = df_yearly['Movie Release Date']
     X = X_centered.values.reshape(-1, 1)  
     y = df_yearly[score].values  
 
-    # Fit the linear regression model
     model = LinearRegression()
     model.fit(X, y)
 
-    # Predict the values for the regression line
     y_pred = model.predict(X)
 
     plt.figure(figsize=(10, 6))
@@ -219,18 +217,15 @@ for i, score in enumerate(diversity_scores):
     equation_text = f'{score_labels[i]} Score = {model.coef_[0]:.4f} * Year + {model.intercept_:.2f}'
     r_squared_text = f'R² = {r_squared:.4f}'
 
-    # Place the regression equation and R-squared value outside the plot
     plt.figtext(0.03, -0.02, equation_text, ha='left', va='top', fontsize=16, color='red')
     plt.figtext(0.03, -0.08, r_squared_text, ha='left', va='top', fontsize=16, color='black')
 
-    # Set labels and title for the plot
     plt.xlabel('Movie release year', fontsize=14)
     plt.ylabel(f'Mean {score_labels[i]} score', fontsize=14)
     plt.title(f'Time evolution of the mean {score_labels[i]} score.', fontsize=14)
     plt.grid(axis='x', linestyle='-', linewidth=0.5, color='grey')
     plt.legend()
 
-    # Adjust layout 
     plt.tight_layout()
     plt.subplots_adjust(bottom=0.1)
     plt.show()
@@ -272,10 +267,9 @@ for label, df in dfs:
     results.append((label, model.coef_[0], model.intercept_))
 
 # Create the bar plot
-# Create the bar plot
 plt.figure(figsize=(10, 6))
 
-# Make a barplot of the coefficients with on the x axis the dfs and on the y the coefficients
+# Make a barplot of the coefficients
 labels = [result[0] for result in results]
 coefficients = [result[1] for result in results]
 
@@ -283,7 +277,6 @@ bars = plt.bar(labels, coefficients, color='darkgrey', alpha=0.7)
 
 # Add the exact value of the regression slope for each coefficient above each bar
 for bar, (label, coef, _) in zip(bars, results):
-    # Positioning the text at the top of each bar with some padding
     plt.text(bar.get_x() + bar.get_width() / 2, bar.get_height() , 
              f'{coef:.4f}', ha='center', va='bottom', fontsize=12, color='black')
 
@@ -324,11 +317,9 @@ for i, score in enumerate(diversity_scores):
         poly = PolynomialFeatures(degree)
         X_poly = poly.fit_transform(X_centered)
 
-        # Fit the model
         model = LinearRegression()
         model.fit(X_poly, y)
 
-        # Predict and calculate R² 
         y_pred = model.predict(X_poly)
         r_squared = model.score(X_poly, y)
 
@@ -339,7 +330,8 @@ for i, score in enumerate(diversity_scores):
 # Plot R² for all scores on a single graph
 plt.figure(figsize=(12, 8))
 
-colors = ['thistle', 'palegoldenrod', 'lightsalmon' ,'mediumseagreen', 'lightblue' , 'indianred'  ]  # Different colors for each score
+# Different colors for each score
+colors = ['thistle', 'palegoldenrod', 'lightsalmon' ,'mediumseagreen', 'lightblue' , 'indianred'  ]  
 for i, score in enumerate(diversity_scores):
     plt.plot(
         results[score]['degrees'],
@@ -357,7 +349,6 @@ plt.title('Polynomial model performance for different degrees and diversity scor
 plt.grid(True)
 plt.legend(loc='upper right', fontsize=12)
 
-# Show the plot
 plt.tight_layout()
 plt.show()
 
@@ -379,7 +370,7 @@ for i, score in enumerate(diversity_scores):
     df_yearly = data_copy.groupby('Movie Release Date')[diversity_scores[i]].mean().reset_index()
 
     # Define the variables for regression
-    X_centered = df_yearly['Movie Release Date']  # Centering around 1895
+    X_centered = df_yearly['Movie Release Date']
     X = X_centered.values.reshape(-1, 1)  
     y = df_yearly[score].values  
 
@@ -388,14 +379,11 @@ for i, score in enumerate(diversity_scores):
     poly = PolynomialFeatures(degree)
     X_poly = poly.fit_transform(X)
 
-    # Fit the linear regression model
     model = LinearRegression()
     model.fit(X_poly, y)
 
-    # Predict the values for the regression line
     y_pred = model.predict(X_poly)
 
-    # Get coefficients and intercept for the polynomial regression
     coeffs = model.coef_
     intercept = model.intercept_
 
@@ -440,7 +428,6 @@ for i, score in enumerate(diversity_scores):
     plt.grid(axis='x', linestyle='-', linewidth=0.5, color='grey')
     plt.legend()
 
-    # Show explicitly the model's coefficients and intercept
     print(f'Polynomial regression coefficients for {score_labels[i]}: {coeffs}')
     print(f'Polynomial regression intercept for {score_labels[i]}: {intercept}')
 
