@@ -220,7 +220,7 @@ plt.grid(True)
 plt.tight_layout()
 
 plt.show()
-
+print('here we plot the me')
 df_yearly = Diversity_movie_metadata.groupby('Movie Release Date')['ethnicity_score'].mean().reset_index()
 
 plt.figure(figsize=(12, 6))
@@ -232,7 +232,7 @@ plt.title('Mean ethnicity Score by Year', fontsize=16)
 plt.grid(True)
 plt.tight_layout()
 
-plt.show()
+
 
 
 df_yearly = Diversity_movie_metadata.groupby('Movie Release Date')['age_score'].mean().reset_index()
@@ -246,7 +246,7 @@ plt.title('Mean Age Score by Year', fontsize=16)
 plt.grid(True)
 plt.tight_layout()
 
-plt.show()
+
 
 df_yearly = Diversity_movie_metadata.groupby('Movie Release Date')['height_score'].median().reset_index()
 
@@ -259,7 +259,7 @@ plt.title('Mean height Score by Year', fontsize=16)
 plt.grid(True)
 plt.tight_layout()
 
-plt.show()
+
 
 
 df_yearly = Diversity_movie_metadata.groupby('Movie Release Date')['Foreign Actor Proportion'].mean().reset_index()
@@ -273,7 +273,7 @@ plt.title('Mean foreign Score by Year', fontsize=16)
 plt.grid(True)
 plt.tight_layout()
 
-plt.show()
+
 
 df_yearly = Diversity_movie_metadata.groupby('Movie Release Date')['diversity_score'].mean().reset_index()
 
@@ -286,7 +286,7 @@ plt.title('Mean diversity Score by Year', fontsize=16)
 plt.grid(True)
 plt.tight_layout()
 
-plt.show()
+
 
 
 df_exploded = Diversity_movie_metadata.explode('Movie Country')
@@ -302,7 +302,7 @@ plt.ylabel('Gender Score')
 plt.xticks(rotation=45, ha='right') 
 plt.tight_layout()
 
-plt.show()
+
 
 
 df_exploded = Diversity_movie_metadata.explode('Movie Country')
@@ -318,7 +318,7 @@ plt.ylabel('ethnicity Score')
 plt.xticks(rotation=45, ha='right') 
 plt.tight_layout()
 
-plt.show()
+
 
 
 
@@ -335,7 +335,7 @@ plt.ylabel('age Score')
 plt.xticks(rotation=45, ha='right') 
 plt.tight_layout()
 
-plt.show()
+
 
 df_exploded = Diversity_movie_metadata.explode('Movie Country')
 top_30_countries = df_exploded['Movie Country'].value_counts().head(30).index
@@ -350,7 +350,7 @@ plt.ylabel('height Score')
 plt.xticks(rotation=45, ha='right') 
 plt.tight_layout()
 
-plt.show()
+
 
 
 df_exploded = Diversity_movie_metadata.explode('Movie Country')
@@ -366,7 +366,7 @@ plt.ylabel('Foreign actor proportion')
 plt.xticks(rotation=45, ha='right') 
 plt.tight_layout()
 
-plt.show()
+
 
 
 
