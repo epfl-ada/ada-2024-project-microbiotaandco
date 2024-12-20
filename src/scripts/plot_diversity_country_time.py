@@ -486,17 +486,17 @@ movie_counts_pre50_top = movie_md_pre50_top.groupby(['Movie Release Date', 'Acto
 movie_counts_top = pd.concat([movie_counts_50_70_top, movie_counts_pre50_top], axis=0)
 
 # Create a line plot for top ethnicities
-sns.relplot(
+g = sns.relplot(
     data=movie_counts_top,
     x="Movie Release Date", y="Movie Count", hue="Actor Ethnicity", kind="line", 
     style="Actor Ethnicity", markers=True, height=6, aspect=1.5
 )
-
+g._legend.remove()
 # Customize the plot with titles and labels
 plt.title('Number of Movies Released by Top Ethnicities (1950-1970 and Pre-1950)', fontsize=16)
 plt.xlabel('Movie Release Year', fontsize=12)
 plt.ylabel('Number of Movies', fontsize=12)
-plt.xticks(rotation=45)
+plt.legend(loc = 'upper left')
 plt.tight_layout()
 
 plt.show()
