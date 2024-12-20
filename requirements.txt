@@ -2,6 +2,7 @@ absl-py==2.1.0
 asttokens==2.4.1
 attrs==24.2.0
 backcall==0.2.0
+bar_chart_race==0.1.0
 beautifulsoup4==4.12.3
 bleach==6.2.0
 certifi==2024.2.2
