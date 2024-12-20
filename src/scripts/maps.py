@@ -714,6 +714,7 @@ for category in unique_categories:
         output_filename = f"choropleth_{category.replace(' ', '_').lower()}.jpg"
         plt.savefig(output_filename, format='jpeg', dpi=300, bbox_inches='tight')
         print(f"Saved plot for category '{category}' as '{output_filename}'.")
+        plt.show()
         plt.close(fig)  # Close the figure to free memory
 
 
