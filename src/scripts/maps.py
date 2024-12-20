@@ -8,7 +8,7 @@ import pandas as pd
 
 
 
-Diversity_movie_metadata=pd.read_csv('Diversity_movie_metadata.csv')
+Diversity_movie_metadata=pd.read_csv('data/Diversity_movie_metadata.csv')
 
 
 
@@ -54,7 +54,7 @@ country_year_scores.sample(10)
 
 
 # Load GeoJSON world boundaries
-world = gpd.read_file('realworld.json')
+world = gpd.read_file('data/realworld.json')
 world['admin'] = world['admin'].str.strip()  # Remove spaces from country names
 
 # Ensure country names in your dataset match the GeoJSON
@@ -172,7 +172,7 @@ country_year_scores1.sample(10)
 #trygender
 
 # Load GeoJSON world boundaries
-world = gpd.read_file('realworld.json')
+world = gpd.read_file('data/realworld.json')
 world['admin'] = world['admin'].str.strip()  # Remove spaces from country names
 
 # Ensure country names in your dataset match the GeoJSON
@@ -293,7 +293,7 @@ country_year_scores2.sample(10)
 
 
 # Load GeoJSON world boundaries
-world = gpd.read_file('realworld.json')
+world = gpd.read_file('data/realworld.json')
 world['admin'] = world['admin'].str.strip()  # Remove spaces from country names
 
 # Ensure country names in your dataset match the GeoJSON
@@ -409,7 +409,7 @@ country_year_scores3.sample(10)
 
 
 # Load GeoJSON world boundaries
-world = gpd.read_file('realworld.json')
+world = gpd.read_file('data/realworld.json')
 world['admin'] = world['admin'].str.strip()  # Remove spaces from country names
 
 # Ensure country names in your dataset match the GeoJSON
@@ -523,7 +523,7 @@ country_year_scores4.sample(10)
 #tryheight
 
 # Load GeoJSON world boundaries
-world = gpd.read_file('realworld.json')
+world = gpd.read_file('data/realworld.json')
 world['admin'] = world['admin'].str.strip()  # Remove spaces from country names
 
 # Ensure country names in your dataset match the GeoJSON
@@ -643,7 +643,7 @@ country_year_scores5.sample(10)
 
 #tryage
 # Load GeoJSON world boundaries
-world = gpd.read_file('realworld.json')
+world = gpd.read_file('data/realworld.json')
 world['admin'] = world['admin'].str.strip()  # Remove spaces from country names
 
 # Ensure country names in your dataset match the GeoJSON
